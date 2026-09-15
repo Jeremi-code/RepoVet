@@ -1,0 +1,35 @@
+{
+  "health_percentage": 100,
+  "description": "The library for web and native user interfaces.",
+  "documentation": "https://react.dev",
+  "files": {
+    "code_of_conduct": {
+      "key": "contributor_covenant",
+      "name": "Contributor Covenant",
+      "html_url": "https://github.com/facebook/react/blob/main/CODE_OF_CONDUCT.md",
+      "url": "https://api.github.com/repos/facebook/react/community/code_of_conduct"
+    },
+    "contributing": {
+      "html_url": "https://github.com/facebook/react/blob/main/CONTRIBUTING.md",
+      "url": "https://api.github.com/repos/facebook/react/contents/CONTRIBUTING.md"
+    },
+    "license": {
+      "key": "mit",
+      "name": "MIT License",
+      "spdx_id": "MIT",
+      "html_url": "https://github.com/facebook/react/blob/main/LICENSE",
+      "url": "https://api.github.com/licenses/mit"
+    },
+    "readme": {
+      "html_url": "https://github.com/facebook/react/blob/main/README.md",
+      "url": "https://api.github.com/repos/facebook/react/contents/README.md"
+    },
+    "security": {
+      "html_url": "https://github.com/facebook/react/blob/main/SECURITY.md",
+      "url": "https://api.github.com/repos/facebook/react/contents/SECURITY.md"
+    },
+    "issue_template": null,
+    "pull_request_template": null
+  },
+  "updated_at": "2026-09-15T00:00:00Z"
+}

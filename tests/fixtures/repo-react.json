@@ -1,0 +1,21 @@
+{
+  "id": 10270250,
+  "name": "react",
+  "full_name": "facebook/react",
+  "description": "The library for web and native user interfaces.",
+  "stargazers_count": 230000,
+  "forks_count": 46000,
+  "open_issues_count": 1200,
+  "license": {
+    "key": "mit",
+    "name": "MIT License",
+    "spdx_id": "MIT",
+    "url": "https://api.github.com/licenses/mit"
+  },
+  "default_branch": "main",
+  "archived": false,
+  "fork": false,
+  "created_at": "2013-05-24T16:15:54Z",
+  "updated_at": "2026-09-15T12:00:00Z",
+  "pushed_at": "2026-09-15T15:30:00Z"
+}
