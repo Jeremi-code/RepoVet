@@ -1,3 +1,5 @@
+import process from 'node:process';
+
 /**
  * Resolves a GitHub Personal Access Token from environment or CLI parameters.
  */
