@@ -1,6 +1,6 @@
 {
   "name": "repo-audit",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Zero-clone, polyglot GitHub repository profiler and adoption audit tool",
   "type": "module",
   "bin": {
