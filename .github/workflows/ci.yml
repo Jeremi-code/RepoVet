@@ -31,6 +31,9 @@ jobs:
       - name: Approve build scripts
         run: pnpm approve-builds --all
 
+      - name: Run Biome Check (Lint & Format)
+        run: pnpm check
+
       - name: Run Typecheck
         run: pnpm typecheck
 
