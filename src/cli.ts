@@ -22,11 +22,16 @@ program
   .version('0.0.1')
   .argument('<target>', 'GitHub repository to audit (e.g. "facebook/react" or full URL)')
   .option('-j, --json', 'Output results as structured JSON')
-  .option('-t, --token <token>', 'GitHub Personal Access Token (or set REPO_AUDIT_TOKEN/GITHUB_TOKEN)')
+  .option(
+    '-t, --token <token>',
+    'GitHub Personal Access Token (or set REPO_AUDIT_TOKEN/GITHUB_TOKEN)'
+  )
   .option('--no-cache', 'Bypass response caching')
   .action(async (target: string, options: CliOptions) => {
     const isJson = Boolean(options.json);
-    const spinner = isJson ? null : ora({ text: `Auditing ${chalk.cyan(target)}...`, color: 'cyan' }).start();
+    const spinner = isJson
+      ? null
+      : ora({ text: `Auditing ${chalk.cyan(target)}...`, color: 'cyan' }).start();
 
     try {
       const token = resolveGitHubToken(options.token);

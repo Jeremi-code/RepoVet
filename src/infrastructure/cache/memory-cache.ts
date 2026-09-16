@@ -1,4 +1,4 @@
-import { CacheEntry, CacheStorage } from './cache.interface.js';
+import type { CacheEntry, CacheStorage } from './cache.interface.js';
 
 export class MemoryCache<T> implements CacheStorage<T> {
   private readonly store = new Map<string, CacheEntry<T>>();

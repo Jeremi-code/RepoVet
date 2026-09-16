@@ -1,4 +1,4 @@
-import { HealthGrade, HygieneCheckItem, HygieneResult } from './models.js';
+import type { HealthGrade, HygieneCheckItem, HygieneResult } from './models.js';
 
 /**
  * Maps a numeric score (0–100) to an industry-standard health grade.

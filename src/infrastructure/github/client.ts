@@ -4,9 +4,9 @@ import {
   RateLimitExceededError,
   RepositoryNotFoundError,
 } from '../../domain/errors.js';
-import { CacheStorage } from '../cache/cache.interface.js';
+import type { CacheStorage } from '../cache/cache.interface.js';
 import { MemoryCache } from '../cache/memory-cache.js';
-import {
+import type {
   GitHubCommunityProfileResponse,
   GitHubRepoResponse,
   RateLimitState,

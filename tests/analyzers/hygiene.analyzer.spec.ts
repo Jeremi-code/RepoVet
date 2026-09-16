@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { HygieneAnalyzer } from '../../src/analyzers/hygiene.analyzer.js';
-import { GitHubClient } from '../../src/infrastructure/github/client.js';
-import { GitHubCommunityProfileResponse } from '../../src/infrastructure/github/types.js';
+import type { GitHubClient } from '../../src/infrastructure/github/client.js';
+import type { GitHubCommunityProfileResponse } from '../../src/infrastructure/github/types.js';
 
 describe('HygieneAnalyzer', () => {
   const reactFixture = JSON.parse(

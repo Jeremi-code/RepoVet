@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import Table from 'cli-table3';
-import { AuditReport, HealthGrade } from '../domain/models.js';
+import type { AuditReport, HealthGrade } from '../domain/models.js';
 
 function renderGradeBadge(grade: HealthGrade): string {
   switch (grade) {
@@ -38,22 +38,20 @@ export function formatTerminalReport(report: AuditReport): string {
 
   // Header Banner
   lines.push('');
-  lines.push(
-    chalk.bold.cyan('╔═══════════════════════════════════════════════════════════════╗')
-  );
+  lines.push(chalk.bold.cyan('╔═══════════════════════════════════════════════════════════════╗'));
   lines.push(
     chalk.bold.cyan('║') +
       chalk.bold.white(`  RepoAudit: ${report.repo.owner}/${report.repo.name}`.padEnd(63)) +
       chalk.bold.cyan('║')
   );
-  lines.push(
-    chalk.bold.cyan('╚═══════════════════════════════════════════════════════════════╝')
-  );
+  lines.push(chalk.bold.cyan('╚═══════════════════════════════════════════════════════════════╝'));
   lines.push('');
 
   // Overview info
   const meta = report.metadata;
-  const desc = meta.description ? chalk.italic(meta.description) : chalk.gray('No description provided.');
+  const desc = meta.description
+    ? chalk.italic(meta.description)
+    : chalk.gray('No description provided.');
   lines.push(desc);
   lines.push('');
 
@@ -88,23 +86,16 @@ export function formatTerminalReport(report: AuditReport): string {
   });
 
   for (const item of report.hygiene.checks) {
-    const status = item.found
-      ? chalk.green.bold('  ✓ PASS ')
-      : chalk.red.bold('  ✗ FAIL ');
+    const status = item.found ? chalk.green.bold('  ✓ PASS ') : chalk.red.bold('  ✗ FAIL ');
 
     const importanceLabel =
       item.importance === 'critical'
         ? chalk.red('Critical')
         : item.importance === 'recommended'
-        ? chalk.yellow('Recommended')
-        : chalk.gray('Optional');
+          ? chalk.yellow('Recommended')
+          : chalk.gray('Optional');
 
-    table.push([
-      status,
-      item.name,
-      `${item.weight} pts`,
-      importanceLabel,
-    ]);
+    table.push([status, item.name, `${item.weight} pts`, importanceLabel]);
   }
 
   lines.push(table.toString());

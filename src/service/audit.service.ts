@@ -1,11 +1,11 @@
 import { HygieneAnalyzer } from '../analyzers/hygiene.analyzer.js';
 import {
-  AuditReport,
+  type AuditReport,
   parseRepoIdentifier,
-  RepoIdentifier,
-  RepoMetadata,
+  type RepoIdentifier,
+  type RepoMetadata,
 } from '../domain/models.js';
-import { GitHubClient, GitHubClientOptions } from '../infrastructure/github/client.js';
+import { GitHubClient, type GitHubClientOptions } from '../infrastructure/github/client.js';
 
 export interface AuditServiceOptions extends GitHubClientOptions {
   readonly client?: GitHubClient | undefined;

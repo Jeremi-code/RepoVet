@@ -1,4 +1,4 @@
-import { RepoIdentifier } from '../domain/models.js';
+import type { RepoIdentifier } from '../domain/models.js';
 
 export interface Analyzer<TResult> {
   readonly name: string;

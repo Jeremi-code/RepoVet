@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { HygieneCheckItem } from '../../src/domain/models.js';
+import type { HygieneCheckItem } from '../../src/domain/models.js';
 import {
   calculateHealthGrade,
   calculateHygieneScore,

@@ -59,7 +59,7 @@ export function parseRepoIdentifier(rawInput: string): RepoIdentifier {
   }
 
   // Handle full URLs like https://github.com/owner/repo or git@github.com:owner/repo.git
-  let normalized = trimmed
+  const normalized = trimmed
     .replace(/^https?:\/\/github\.com\//i, '')
     .replace(/^git@github\.com:/i, '')
     .replace(/\.git$/i, '')

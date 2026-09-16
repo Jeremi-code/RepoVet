@@ -1,14 +1,7 @@
-import {
-  HygieneCheckItem,
-  HygieneResult,
-  RepoIdentifier,
-} from '../domain/models.js';
-import {
-  calculateHygieneScore,
-  HYGIENE_WEIGHTS,
-} from '../domain/scoring.js';
-import { GitHubClient } from '../infrastructure/github/client.js';
-import { Analyzer } from './analyzer.interface.js';
+import type { HygieneCheckItem, HygieneResult, RepoIdentifier } from '../domain/models.js';
+import { calculateHygieneScore, HYGIENE_WEIGHTS } from '../domain/scoring.js';
+import type { GitHubClient } from '../infrastructure/github/client.js';
+import type { Analyzer } from './analyzer.interface.js';
 
 export class HygieneAnalyzer implements Analyzer<HygieneResult> {
   public readonly name = 'hygiene';
@@ -19,10 +12,7 @@ export class HygieneAnalyzer implements Analyzer<HygieneResult> {
   }
 
   public async analyze(repo: RepoIdentifier): Promise<HygieneResult> {
-    const { data: profile } = await this.client.getCommunityProfile(
-      repo.owner,
-      repo.name
-    );
+    const { data: profile } = await this.client.getCommunityProfile(repo.owner, repo.name);
 
     const files = profile.files;
 
