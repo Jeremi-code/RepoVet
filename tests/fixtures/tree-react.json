@@ -1,0 +1,49 @@
+{
+  "sha": "abc123sha",
+  "url": "https://api.github.com/repos/facebook/react/git/trees/abc123sha",
+  "tree": [
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1",
+      "url": "https://api.github.com"
+    },
+    {
+      "path": "yarn.lock",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2",
+      "url": "https://api.github.com"
+    },
+    {
+      "path": "tsconfig.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3",
+      "url": "https://api.github.com"
+    },
+    {
+      "path": ".github/workflows/runtime.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4",
+      "url": "https://api.github.com"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5",
+      "url": "https://api.github.com"
+    },
+    {
+      "path": "packages/react/index.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6",
+      "url": "https://api.github.com"
+    }
+  ],
+  "truncated": false
+}
