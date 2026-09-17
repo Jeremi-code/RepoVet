@@ -56,3 +56,21 @@ export interface RateLimitState {
   readonly remaining: number;
   readonly reset: number;
 }
+
+export interface GitHubGitTreeItem {
+  readonly path: string;
+  readonly mode: string;
+  readonly type: 'blob' | 'tree';
+  readonly sha: string;
+  readonly size?: number | undefined;
+  readonly url: string;
+}
+
+export interface GitHubGitTreeResponse {
+  readonly sha: string;
+  readonly url: string;
+  readonly tree: readonly GitHubGitTreeItem[];
+  readonly truncated: boolean;
+}
+
+export type GitHubLanguagesResponse = Record<string, number>;

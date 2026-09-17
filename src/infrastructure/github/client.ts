@@ -4,10 +4,13 @@ import {
   RateLimitExceededError,
   RepositoryNotFoundError,
 } from '../../domain/errors.js';
+import { APP_VERSION } from '../../domain/models.js';
 import type { CacheStorage } from '../cache/cache.interface.js';
 import { MemoryCache } from '../cache/memory-cache.js';
 import type {
   GitHubCommunityProfileResponse,
+  GitHubGitTreeResponse,
+  GitHubLanguagesResponse,
   GitHubRepoResponse,
   RateLimitState,
 } from './types.js';
@@ -33,7 +36,7 @@ export class GitHubClient {
     this.token = options.token;
     this.cache = options.cache ?? new MemoryCache<unknown>();
     this.fetchFn = options.fetchFn ?? globalThis.fetch;
-    this.userAgent = options.userAgent ?? 'repo-audit/0.0.1';
+    this.userAgent = options.userAgent ?? `repo-audit/${APP_VERSION}`;
   }
 
   public getRateLimitState(): RateLimitState | undefined {
@@ -54,6 +57,25 @@ export class GitHubClient {
   ): Promise<{ data: GitHubCommunityProfileResponse; fromCache: boolean }> {
     const endpoint = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/community/profile`;
     return this.request<GitHubCommunityProfileResponse>(endpoint, owner, name);
+  }
+
+  public async getTree(
+    owner: string,
+    name: string,
+    branch: string = 'HEAD',
+    recursive: boolean = true
+  ): Promise<{ data: GitHubGitTreeResponse; fromCache: boolean }> {
+    const recParam = recursive ? '?recursive=1' : '';
+    const endpoint = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/git/trees/${encodeURIComponent(branch)}${recParam}`;
+    return this.request<GitHubGitTreeResponse>(endpoint, owner, name);
+  }
+
+  public async getLanguages(
+    owner: string,
+    name: string
+  ): Promise<{ data: GitHubLanguagesResponse; fromCache: boolean }> {
+    const endpoint = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/languages`;
+    return this.request<GitHubLanguagesResponse>(endpoint, owner, name);
   }
 
   private async request<T>(

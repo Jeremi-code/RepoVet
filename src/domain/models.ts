@@ -1,5 +1,7 @@
 import { InvalidRepoIdentifierError } from './errors.js';
 
+export const APP_VERSION = '1.1.0';
+
 export interface RepoIdentifier {
   readonly owner: string;
   readonly name: string;
@@ -39,6 +41,23 @@ export interface RepoMetadata {
   readonly pushedAt: string;
 }
 
+export interface LanguageItem {
+  readonly name: string;
+  readonly bytes: number;
+  readonly percentage: number;
+}
+
+export type LanguageBreakdown = readonly LanguageItem[];
+
+export interface DetectedTechStack {
+  readonly runtimes: readonly string[];
+  readonly packageManager?: string | undefined;
+  readonly frameworks: readonly string[];
+  readonly buildTools: readonly string[];
+  readonly ciWorkflows: readonly string[];
+  readonly hasDocker: boolean;
+}
+
 export interface AuditReport {
   readonly version: string;
   readonly repo: RepoIdentifier;
@@ -46,6 +65,8 @@ export interface AuditReport {
   readonly fromCache: boolean;
   readonly metadata: RepoMetadata;
   readonly hygiene: HygieneResult;
+  readonly languages: LanguageBreakdown;
+  readonly stack: DetectedTechStack;
 }
 
 /**
