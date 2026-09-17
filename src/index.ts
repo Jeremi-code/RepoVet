@@ -4,6 +4,8 @@ import { AuditService, type AuditServiceOptions } from './service/audit.service.
 // Analyzers
 export * from './analyzers/analyzer.interface.js';
 export * from './analyzers/hygiene.analyzer.js';
+export * from './analyzers/language.analyzer.js';
+export * from './analyzers/stack.analyzer.js';
 export * from './domain/errors.js';
 // Domain models & functions
 export * from './domain/models.js';

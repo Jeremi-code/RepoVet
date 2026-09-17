@@ -65,6 +65,54 @@ export function formatTerminalReport(report: AuditReport): string {
   lines.push(stats.join(chalk.gray('  |  ')));
   lines.push('');
 
+  // Language Breakdown
+  if (report.languages.length > 0) {
+    const topLangs = report.languages.slice(0, 5);
+    const summary = topLangs
+      .map((l) => `${chalk.bold.cyan(l.name)} ${chalk.gray(`${l.percentage}%`)}`)
+      .join(chalk.gray('  ·  '));
+    lines.push(`${chalk.bold('Languages:')} ${summary}`);
+    lines.push('');
+  }
+
+  // Tech Stack & Tooling
+  const stack = report.stack;
+  const stackItems: string[] = [];
+  if (stack.runtimes.length > 0) {
+    stackItems.push(
+      `${chalk.bold('Runtimes:')} ${stack.runtimes.map((r) => chalk.cyan(r)).join(', ')}`
+    );
+  }
+  if (stack.packageManager) {
+    stackItems.push(`${chalk.bold('Package Manager:')} ${chalk.green(stack.packageManager)}`);
+  }
+  if (stack.frameworks.length > 0) {
+    stackItems.push(
+      `${chalk.bold('Frameworks:')} ${stack.frameworks.map((f) => chalk.magenta(f)).join(', ')}`
+    );
+  }
+  if (stack.buildTools.length > 0) {
+    stackItems.push(
+      `${chalk.bold('Tooling:')} ${stack.buildTools.map((t) => chalk.blue(t)).join(', ')}`
+    );
+  }
+  if (stack.hasDocker) {
+    stackItems.push(`${chalk.bold('Containers:')} ${chalk.blue('Docker')}`);
+  }
+  if (stack.ciWorkflows.length > 0) {
+    stackItems.push(
+      `${chalk.bold('CI/CD:')} ${stack.ciWorkflows.map((w) => chalk.yellow(w)).join(', ')}`
+    );
+  }
+
+  if (stackItems.length > 0) {
+    lines.push(chalk.bold('Tech Stack & Infrastructure:'));
+    for (const item of stackItems) {
+      lines.push(`  • ${item}`);
+    }
+    lines.push('');
+  }
+
   // Overall Health Score
   lines.push(
     `${chalk.bold('Overall Hygiene Score:')} ${renderScoreMeter(report.hygiene.score)}  ${renderGradeBadge(

@@ -1,5 +1,8 @@
 import { HygieneAnalyzer } from '../analyzers/hygiene.analyzer.js';
+import { LanguageAnalyzer } from '../analyzers/language.analyzer.js';
+import { StackAnalyzer } from '../analyzers/stack.analyzer.js';
 import {
+  APP_VERSION,
   type AuditReport,
   parseRepoIdentifier,
   type RepoIdentifier,
@@ -14,19 +17,25 @@ export interface AuditServiceOptions extends GitHubClientOptions {
 export class AuditService {
   private readonly client: GitHubClient;
   private readonly hygieneAnalyzer: HygieneAnalyzer;
+  private readonly stackAnalyzer: StackAnalyzer;
+  private readonly languageAnalyzer: LanguageAnalyzer;
 
   constructor(options: AuditServiceOptions = {}) {
     this.client = options.client ?? new GitHubClient(options);
     this.hygieneAnalyzer = new HygieneAnalyzer(this.client);
+    this.stackAnalyzer = new StackAnalyzer(this.client);
+    this.languageAnalyzer = new LanguageAnalyzer(this.client);
   }
 
   public async audit(target: string | RepoIdentifier): Promise<AuditReport> {
     const repo = typeof target === 'string' ? parseRepoIdentifier(target) : target;
 
-    // Fetch repository metadata and run analyzers concurrently
-    const [repoResult, hygieneResult] = await Promise.all([
+    // Fetch repository metadata and run all analyzers concurrently
+    const [repoResult, hygieneResult, stackResult, languagesResult] = await Promise.all([
       this.client.getRepo(repo.owner, repo.name),
       this.hygieneAnalyzer.analyze(repo),
+      this.stackAnalyzer.analyze(repo),
+      this.languageAnalyzer.analyze(repo),
     ]);
 
     const rawMeta = repoResult.data;
@@ -45,12 +54,14 @@ export class AuditService {
     };
 
     return {
-      version: '0.0.1',
+      version: APP_VERSION,
       repo,
       timestamp: new Date().toISOString(),
       fromCache: repoResult.fromCache,
       metadata,
       hygiene: hygieneResult,
+      languages: languagesResult,
+      stack: stackResult,
     };
   }
 }

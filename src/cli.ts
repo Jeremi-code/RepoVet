@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import ora from 'ora';
 import { RepoAuditError } from './domain/errors.js';
+import { APP_VERSION } from './domain/models.js';
 import { formatJsonReport } from './formatters/json.formatter.js';
 import { formatTerminalReport } from './formatters/terminal.formatter.js';
 import { resolveGitHubToken } from './infrastructure/github/token.js';
@@ -19,7 +20,7 @@ const program = new Command();
 program
   .name('repo-audit')
   .description('Zero-clone, polyglot GitHub repository profiler and adoption audit tool')
-  .version('0.0.1')
+  .version(APP_VERSION)
   .argument('<target>', 'GitHub repository to audit (e.g. "facebook/react" or full URL)')
   .option('-j, --json', 'Output results as structured JSON')
   .option(
