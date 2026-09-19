@@ -69,6 +69,8 @@ export interface AuditReport {
   readonly stack: DetectedTechStack;
 }
 
+export type VetReport = AuditReport;
+
 /**
  * Parses user input (e.g. 'facebook/react' or 'https://github.com/facebook/react')
  * into a typed RepoIdentifier.

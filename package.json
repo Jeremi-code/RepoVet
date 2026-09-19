@@ -1,10 +1,11 @@
 {
-  "name": "repo-audit",
+  "name": "repovet",
   "version": "1.1.0",
-  "description": "Zero-clone, polyglot GitHub repository profiler and adoption audit tool",
+  "description": "Zero-clone, polyglot GitHub repository profiler and adoption vetting tool",
   "type": "module",
   "bin": {
-    "repo-audit": "./dist/cli.js"
+    "repovet": "./dist/cli.js",
+    "repo-vet": "./dist/cli.js"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -27,6 +28,8 @@
     "github",
     "repository",
     "audit",
+    "vet",
+    "repovet",
     "health-check",
     "bus-factor",
     "cli",

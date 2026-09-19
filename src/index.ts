@@ -24,12 +24,17 @@ export * from './infrastructure/github/types.js';
 export * from './service/audit.service.js';
 
 /**
- * Convenience function to audit a GitHub repository programmatically.
+ * Primary programmatic function to vet a GitHub repository.
  */
-export async function auditRepo(
+export async function vetRepo(
   target: string | RepoIdentifier,
   options?: AuditServiceOptions
 ): Promise<AuditReport> {
   const service = new AuditService(options);
   return service.audit(target);
 }
+
+/**
+ * Backward-compatible alias for vetRepo.
+ */
+export const auditRepo = vetRepo;

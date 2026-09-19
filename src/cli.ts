@@ -2,7 +2,7 @@ import process from 'node:process';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import ora from 'ora';
-import { RepoAuditError } from './domain/errors.js';
+import { RepoVetError } from './domain/errors.js';
 import { APP_VERSION } from './domain/models.js';
 import { formatJsonReport } from './formatters/json.formatter.js';
 import { formatTerminalReport } from './formatters/terminal.formatter.js';
@@ -18,21 +18,21 @@ interface CliOptions {
 const program = new Command();
 
 program
-  .name('repo-audit')
-  .description('Zero-clone, polyglot GitHub repository profiler and adoption audit tool')
+  .name('repovet')
+  .description('Zero-clone, polyglot GitHub repository profiler and adoption vetting tool')
   .version(APP_VERSION)
-  .argument('<target>', 'GitHub repository to audit (e.g. "facebook/react" or full URL)')
+  .argument('<target>', 'GitHub repository to vet (e.g. "facebook/react" or full URL)')
   .option('-j, --json', 'Output results as structured JSON')
   .option(
     '-t, --token <token>',
-    'GitHub Personal Access Token (or set REPO_AUDIT_TOKEN/GITHUB_TOKEN)'
+    'GitHub Personal Access Token (or set REPO_VET_TOKEN/GITHUB_TOKEN)'
   )
   .option('--no-cache', 'Bypass response caching')
   .action(async (target: string, options: CliOptions) => {
     const isJson = Boolean(options.json);
     const spinner = isJson
       ? null
-      : ora({ text: `Auditing ${chalk.cyan(target)}...`, color: 'cyan' }).start();
+      : ora({ text: `Vetting ${chalk.cyan(target)}...`, color: 'cyan' }).start();
 
     try {
       const token = resolveGitHubToken(options.token);
@@ -57,7 +57,7 @@ program
         spinner.stop();
       }
 
-      if (err instanceof RepoAuditError) {
+      if (err instanceof RepoVetError) {
         if (isJson) {
           console.error(
             JSON.stringify(

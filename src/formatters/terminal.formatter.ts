@@ -41,7 +41,7 @@ export function formatTerminalReport(report: AuditReport): string {
   lines.push(chalk.bold.cyan('╔═══════════════════════════════════════════════════════════════╗'));
   lines.push(
     chalk.bold.cyan('║') +
-      chalk.bold.white(`  RepoAudit: ${report.repo.owner}/${report.repo.name}`.padEnd(63)) +
+      chalk.bold.white(`  RepoVet: ${report.repo.owner}/${report.repo.name}`.padEnd(63)) +
       chalk.bold.cyan('║')
   );
   lines.push(chalk.bold.cyan('╚═══════════════════════════════════════════════════════════════╝'));

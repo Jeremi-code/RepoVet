@@ -36,7 +36,7 @@ export class GitHubClient {
     this.token = options.token;
     this.cache = options.cache ?? new MemoryCache<unknown>();
     this.fetchFn = options.fetchFn ?? globalThis.fetch;
-    this.userAgent = options.userAgent ?? `repo-audit/${APP_VERSION}`;
+    this.userAgent = options.userAgent ?? `repovet/${APP_VERSION}`;
   }
 
   public getRateLimitState(): RateLimitState | undefined {

@@ -1,36 +1,39 @@
-# 🔍 repo-audit
+# 🔍 repovet
 
-> **Zero-clone, polyglot GitHub repository profiler and adoption audit tool.**
+> **Zero-clone, polyglot GitHub repository profiler and adoption vetting tool.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-green?logo=node.js)](https://nodejs.org/)
 [![Vitest](https://img.shields.io/badge/tested%20with-vitest-yellow?logo=vitest)](https://vitest.dev/)
 
-Engineers and tech leads constantly evaluate whether an open-source library is active, healthy, and safe to adopt into production. `repo-audit` performs deep diagnostics on remote GitHub repositories in seconds—**without cloning gigabytes of git history to your disk**.
+Engineers and tech leads constantly evaluate whether an open-source library is active, healthy, and safe to adopt into production. `repovet` performs deep diagnostics on remote GitHub repositories in seconds—**without cloning gigabytes of git history to your disk**.
 
 ---
 
 ## ⚡ Quick Start
 
-You can run `repo-audit` instantly without installation:
+You can run `repovet` instantly without installation:
 
 ```bash
 # Run via npx
-npx repo-audit facebook/react
+npx repovet facebook/react
+
+# Also available as repo-vet
+npx repo-vet facebook/react
 
 # Or with full repository URL
-npx repo-audit https://github.com/vercel/next.js
+npx repovet https://github.com/vercel/next.js
 ```
 
 Or install it globally:
 
 ```bash
 # Using pnpm (recommended)
-pnpm add -g repo-audit
+pnpm add -g repovet
 
 # Using npm
-npm install -g repo-audit
+npm install -g repovet
 ```
 
 ---
@@ -39,21 +42,21 @@ npm install -g repo-audit
 
 ```bash
 # Basic terminal audit with gauges and checklist
-repo-audit expressjs/express
+repovet expressjs/express
 
 # Output machine-readable JSON for CI/CD or piping to jq
-repo-audit expressjs/express --json
+repovet expressjs/express --json
 
 # Provide an authenticated GitHub token (raises rate-limit to 5,000 req/hr)
-repo-audit expressjs/express --token ghp_yourPersonalAccessToken
-# or export GITHUB_TOKEN=ghp_...
+repovet expressjs/express --token ghp_yourPersonalAccessToken
+# or export REPO_VET_TOKEN=ghp_... (or GITHUB_TOKEN=ghp_...)
 ```
 
 ### Sample Terminal Output
 
 ```text
 ╔═══════════════════════════════════════════════════════════════╗
-║  RepoAudit: facebook/react                                    ║
+║  RepoVet: facebook/react                                      ║
 ╚═══════════════════════════════════════════════════════════════╝
 
 The library for web and native user interfaces.
@@ -84,12 +87,12 @@ Overall Hygiene Score: [████████████████░░�
 
 ## 📦 Programmatic SDK Usage
 
-`repo-audit` is also a fully typed TypeScript library:
+`repovet` is also a fully typed TypeScript library:
 
 ```typescript
-import { auditRepo } from 'repo-audit';
+import { vetRepo } from 'repovet';
 
-const report = await auditRepo('facebook/react');
+const report = await vetRepo('facebook/react');
 
 console.log(`Health Grade: ${report.hygiene.grade}`);
 console.log(`Score: ${report.hygiene.score}/100`);
@@ -119,7 +122,7 @@ This project is built under strict software engineering principles to ensure mai
 - [x] **v1.0.0 (Released)**: Core engine, resilient GitHub API client with ETag cache, Hygiene Analyzer, rich terminal & JSON formatters, CLI entrypoint, and unit test suite.
 - [x] **v1.1.0 (Current)**: Zero-clone Git Trees analyzer, polyglot stack detector (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, Docker), and language composition breakdown.
 - [ ] **v1.2.0**: Bus factor calculation via Gini coefficient, commit velocity metrics, and weighted composite Health Score (0–100).
-- [ ] **v1.3.0**: Multi-repo side-by-side battle mode (`repo-audit compare repoA repoB`), Markdown report exporter, and `--min-score` CI quality gate.
+- [ ] **v1.3.0**: Multi-repo side-by-side battle mode (`repovet compare repoA repoB`), Markdown report exporter, and `--min-score` CI quality gate.
 
 ---
 

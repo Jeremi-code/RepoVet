@@ -8,7 +8,7 @@ export function resolveGitHubToken(explicitToken?: string): string | undefined {
     return explicitToken.trim();
   }
 
-  const envVars = ['REPO_AUDIT_TOKEN', 'GITHUB_TOKEN', 'GH_TOKEN'];
+  const envVars = ['REPO_VET_TOKEN', 'REPO_AUDIT_TOKEN', 'GITHUB_TOKEN', 'GH_TOKEN'];
   for (const varName of envVars) {
     const val = process.env[varName];
     if (val?.trim()) {
