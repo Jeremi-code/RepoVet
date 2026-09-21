@@ -120,8 +120,8 @@ This project is built under strict software engineering principles to ensure mai
 ## 🗺️ Roadmap & Releases
 
 - [x] **v1.0.0 (Released)**: Core engine, resilient GitHub API client with ETag cache, Hygiene Analyzer, rich terminal & JSON formatters, CLI entrypoint, and unit test suite.
-- [x] **v1.1.0 (Current)**: Zero-clone Git Trees analyzer, polyglot stack detector (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, Docker), and language composition breakdown.
-- [ ] **v1.2.0**: Bus factor calculation via Gini coefficient, commit velocity metrics, and weighted composite Health Score (0–100).
+- [x] **v1.1.0 (Released)**: Zero-clone Git Trees analyzer, polyglot stack detector (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, Docker), and language composition breakdown.
+- [x] **v1.2.0 (Current)**: Bus factor calculation via Gini coefficient, commit velocity metrics, and weighted composite Health Score (0–100).
 - [ ] **v1.3.0**: Multi-repo side-by-side battle mode (`repovet compare repoA repoB`), Markdown report exporter, and `--min-score` CI quality gate.
 
 ---

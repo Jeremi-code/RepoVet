@@ -74,3 +74,17 @@ export interface GitHubGitTreeResponse {
 }
 
 export type GitHubLanguagesResponse = Record<string, number>;
+
+export interface GitHubContributorItem {
+  readonly login: string;
+  readonly id: number;
+  readonly contributions: number;
+  readonly avatar_url: string;
+  readonly html_url: string;
+  readonly type?: string;
+}
+
+export interface GitHubParticipationResponse {
+  readonly all: readonly number[];
+  readonly owner: readonly number[];
+}

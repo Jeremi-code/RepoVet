@@ -2,7 +2,9 @@ import type { AuditReport, RepoIdentifier } from './domain/models.js';
 import { AuditService, type AuditServiceOptions } from './service/audit.service.js';
 
 // Analyzers
+export * from './analyzers/activity.analyzer.js';
 export * from './analyzers/analyzer.interface.js';
+export * from './analyzers/bus-factor.analyzer.js';
 export * from './analyzers/hygiene.analyzer.js';
 export * from './analyzers/language.analyzer.js';
 export * from './analyzers/stack.analyzer.js';

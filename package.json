@@ -1,6 +1,6 @@
 {
   "name": "repovet",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Zero-clone, polyglot GitHub repository profiler and adoption vetting tool",
   "type": "module",
   "bin": {

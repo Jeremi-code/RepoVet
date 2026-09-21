@@ -1,6 +1,6 @@
 import { InvalidRepoIdentifierError } from './errors.js';
 
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';
 
 export interface RepoIdentifier {
   readonly owner: string;
@@ -58,6 +58,37 @@ export interface DetectedTechStack {
   readonly hasDocker: boolean;
 }
 
+export type BusFactorRisk = 'high' | 'moderate' | 'healthy';
+
+export interface ContributorStat {
+  readonly login: string;
+  readonly contributions: number;
+  readonly percentage: number;
+}
+
+export interface BusFactorResult {
+  readonly busFactor: number;
+  readonly risk: BusFactorRisk;
+  readonly giniCoefficient: number;
+  readonly totalContributors: number;
+  readonly topContributors: readonly ContributorStat[];
+}
+
+export interface ActivityMetrics {
+  readonly lastPushedDaysAgo: number;
+  readonly commitsLast30Days: number;
+  readonly commitsLast90Days: number;
+  readonly isStale: boolean;
+}
+
+export interface HealthScoreBreakdown {
+  readonly hygieneScore: number;
+  readonly activityScore: number;
+  readonly busFactorScore: number;
+  readonly compositeScore: number;
+  readonly grade: HealthGrade;
+}
+
 export interface AuditReport {
   readonly version: string;
   readonly repo: RepoIdentifier;
@@ -67,6 +98,9 @@ export interface AuditReport {
   readonly hygiene: HygieneResult;
   readonly languages: LanguageBreakdown;
   readonly stack: DetectedTechStack;
+  readonly busFactor: BusFactorResult;
+  readonly activity: ActivityMetrics;
+  readonly healthScore: HealthScoreBreakdown;
 }
 
 export type VetReport = AuditReport;

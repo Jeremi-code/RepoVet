@@ -9,8 +9,10 @@ import type { CacheStorage } from '../cache/cache.interface.js';
 import { MemoryCache } from '../cache/memory-cache.js';
 import type {
   GitHubCommunityProfileResponse,
+  GitHubContributorItem,
   GitHubGitTreeResponse,
   GitHubLanguagesResponse,
+  GitHubParticipationResponse,
   GitHubRepoResponse,
   RateLimitState,
 } from './types.js';
@@ -76,6 +78,23 @@ export class GitHubClient {
   ): Promise<{ data: GitHubLanguagesResponse; fromCache: boolean }> {
     const endpoint = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/languages`;
     return this.request<GitHubLanguagesResponse>(endpoint, owner, name);
+  }
+
+  public async getContributors(
+    owner: string,
+    name: string,
+    perPage: number = 100
+  ): Promise<{ data: GitHubContributorItem[]; fromCache: boolean }> {
+    const endpoint = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/contributors?per_page=${perPage}`;
+    return this.request<GitHubContributorItem[]>(endpoint, owner, name);
+  }
+
+  public async getParticipation(
+    owner: string,
+    name: string
+  ): Promise<{ data: GitHubParticipationResponse; fromCache: boolean }> {
+    const endpoint = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/stats/participation`;
+    return this.request<GitHubParticipationResponse>(endpoint, owner, name);
   }
 
   private async request<T>(

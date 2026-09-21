@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import Table from 'cli-table3';
-import type { AuditReport, HealthGrade } from '../domain/models.js';
+import type { AuditReport, BusFactorRisk, HealthGrade } from '../domain/models.js';
 
 function renderGradeBadge(grade: HealthGrade): string {
   switch (grade) {
@@ -16,6 +16,17 @@ function renderGradeBadge(grade: HealthGrade): string {
       return chalk.bgHex('#FF8C00').black.bold('  D  ');
     case 'F':
       return chalk.bgRed.white.bold('  F  ');
+  }
+}
+
+function renderRiskBadge(risk: BusFactorRisk): string {
+  switch (risk) {
+    case 'high':
+      return chalk.bgRed.white.bold(' HIGH RISK ');
+    case 'moderate':
+      return chalk.bgYellow.black.bold(' MODERATE RISK ');
+    case 'healthy':
+      return chalk.bgGreen.black.bold(' HEALTHY ');
   }
 }
 
@@ -113,11 +124,53 @@ export function formatTerminalReport(report: AuditReport): string {
     lines.push('');
   }
 
+  // Maintenance & Activity
+  const act = report.activity;
+  const pushText =
+    act.lastPushedDaysAgo === 0
+      ? 'today'
+      : act.lastPushedDaysAgo === 1
+        ? 'yesterday'
+        : `${act.lastPushedDaysAgo} days ago`;
+  const staleBadge = act.isStale
+    ? chalk.bgRed.white.bold(' STALE ')
+    : chalk.bgGreen.black.bold(' ACTIVE ');
+
+  lines.push(
+    `${chalk.bold('Maintenance & Activity:')} ${staleBadge}  ` +
+      `Last push: ${chalk.cyan(pushText)}  ·  ` +
+      `Commits (30d): ${chalk.yellow(act.commitsLast30Days.toLocaleString())}  ·  ` +
+      `Commits (90d): ${chalk.magenta(act.commitsLast90Days.toLocaleString())}`
+  );
+  lines.push('');
+
+  // Bus Factor & Contributor Distribution
+  const bf = report.busFactor;
+  const topText =
+    bf.topContributors.length > 0
+      ? bf.topContributors.map((c) => `${chalk.cyan(c.login)} (${c.percentage}%)`).join(', ')
+      : 'None detected';
+
+  lines.push(
+    `${chalk.bold('Bus Factor:')} ${chalk.bold.yellow(bf.busFactor.toString())} ${renderRiskBadge(bf.risk)}  ` +
+      `Gini Index: ${chalk.cyan(bf.giniCoefficient.toFixed(2))}  ·  ` +
+      `Contributors: ${chalk.white(bf.totalContributors.toLocaleString())}`
+  );
+  lines.push(`  ${chalk.gray('Top maintainers:')} ${topText}`);
+  lines.push('');
+
   // Overall Health Score
   lines.push(
-    `${chalk.bold('Overall Hygiene Score:')} ${renderScoreMeter(report.hygiene.score)}  ${renderGradeBadge(
-      report.hygiene.grade
-    )}`
+    `${chalk.bold('Overall Health Score:')} ${renderScoreMeter(
+      report.healthScore.compositeScore
+    )}  ${renderGradeBadge(report.healthScore.grade)}`
+  );
+  lines.push(
+    chalk.gray(
+      `  Hygiene: ${report.healthScore.hygieneScore}/100 (40%)  ·  ` +
+        `Activity: ${report.healthScore.activityScore}/100 (35%)  ·  ` +
+        `Bus Factor: ${report.healthScore.busFactorScore}/100 (25%)`
+    )
   );
   lines.push('');
 
