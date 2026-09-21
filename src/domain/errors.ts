@@ -89,3 +89,12 @@ export class NetworkError extends RepoVetError {
     }
   }
 }
+
+export class InvalidOptionsError extends RepoVetError {
+  public readonly code = 'INVALID_OPTIONS';
+  public readonly exitCode = 1;
+
+  constructor(message: string, hint?: string) {
+    super(message, hint);
+  }
+}

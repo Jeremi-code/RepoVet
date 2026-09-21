@@ -1,6 +1,6 @@
 # 🔍 repovet
 
-> **Zero-clone, polyglot GitHub repository profiler and adoption vetting tool.**
+> **Zero-clone, polyglot GitHub repository profiler, health auditor, and battle-mode comparison tool.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -16,14 +16,20 @@ Engineers and tech leads constantly evaluate whether an open-source library is a
 You can run `repovet` instantly without installation:
 
 ```bash
-# Run via npx
+# Run single repo audit
 npx repovet facebook/react
 
 # Also available as repo-vet
 npx repo-vet facebook/react
 
-# Or with full repository URL
-npx repovet https://github.com/vercel/next.js
+# Compare repositories in Battle Mode
+npx repovet compare facebook/react vuejs/core sveltejs/svelte
+
+# Generate clean GitHub Flavored Markdown (perfect for $GITHUB_STEP_SUMMARY)
+npx repovet facebook/react --markdown
+
+# Enforce a CI quality gate
+npx repovet facebook/react --min-score 80
 ```
 
 Or install it globally:
@@ -40,89 +46,105 @@ npm install -g repovet
 
 ## 🖥️ CLI Usage
 
+### 1. Single Repository Audit
+
 ```bash
-# Basic terminal audit with gauges and checklist
+# Rich interactive terminal report
 repovet expressjs/express
 
 # Output machine-readable JSON for CI/CD or piping to jq
 repovet expressjs/express --json
 
-# Provide an authenticated GitHub token (raises rate-limit to 5,000 req/hr)
+# Output GitHub-Flavored Markdown for PR comments or ADR docs
+repovet expressjs/express --markdown
+
+# Enforce minimum health score (exits with code 1 if threshold is not met)
+repovet expressjs/express --min-score 75
+
+# Authenticated token (raises GitHub rate-limit to 5,000 req/hr)
 repovet expressjs/express --token ghp_yourPersonalAccessToken
 # or export REPO_VET_TOKEN=ghp_... (or GITHUB_TOKEN=ghp_...)
 ```
 
-### Sample Terminal Output
+### 2. Multi-Repo "Battle Mode" Comparison
 
-```text
-╔═══════════════════════════════════════════════════════════════╗
-║  RepoVet: facebook/react                                      ║
-╚═══════════════════════════════════════════════════════════════╝
+Compare two or more competing libraries side-by-side:
 
-The library for web and native user interfaces.
+```bash
+# Compare multiple repos side-by-side in terminal
+repovet compare facebook/react vuejs/core
 
-★ 250,469 stars  |  ⑂ 51,349 forks  |  ☉ 1,374 open issues  |  ⚖ MIT  |  (live)
+# Compare in GitHub-Flavored Markdown table
+repovet compare facebook/react vuejs/core --markdown
 
-Overall Hygiene Score: [████████████████░░░░] 80/100    B  
+# Export comparison matrix as JSON
+repovet compare facebook/react vuejs/core --json
+```
 
-┌────────────┬──────────────────────────────────────┬──────────┬───────────────┐
-│ Status     │ Check Item                           │ Weight   │ Importance    │
-├────────────┼──────────────────────────────────────┼──────────┼───────────────┤
-│   ✓ PASS   │ Open Source License                  │ 35 pts   │ Critical      │
-├────────────┼──────────────────────────────────────┼──────────┼───────────────┤
-│   ✓ PASS   │ README Documentation                 │ 30 pts   │ Critical      │
-├────────────┼──────────────────────────────────────┼──────────┼───────────────┤
-│   ✗ FAIL   │ Security Policy (SECURITY.md)        │ 20 pts   │ Recommended   │
-├────────────┼──────────────────────────────────────┼──────────┼───────────────┤
-│   ✓ PASS   │ Contributing Guide (CONTRIBUTING.md) │ 10 pts   │ Recommended   │
-├────────────┼──────────────────────────────────────┼──────────┼───────────────┤
-│   ✓ PASS   │ Code of Conduct (CODE_OF_CONDUCT.md) │ 5 pts    │ Optional      │
-└────────────┴──────────────────────────────────────┴──────────┴───────────────┘
+---
 
-⚡ Actionable Recommendations:
-  (-) Add Security Policy (SECURITY.md): Instructions on how to responsibly disclose vulnerabilities.
+## 🚦 CI/CD Quality Gate Example
+
+Add `repovet` to your GitHub Actions workflow to block PRs or monitor project health:
+
+```yaml
+name: Repository Health Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  vet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vet Repository Quality Gate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx repovet ${{ github.repository }} --min-score 70 --markdown >> $GITHUB_STEP_SUMMARY
 ```
 
 ---
 
 ## 📦 Programmatic SDK Usage
 
-`repovet` is also a fully typed TypeScript library:
+`repovet` is fully typed and can be integrated into custom Node.js/TypeScript tooling:
 
 ```typescript
-import { vetRepo } from 'repovet';
+import { vetRepo, compareRepos } from 'repovet';
 
+// 1. Audit a single repository
 const report = await vetRepo('facebook/react');
+console.log(`Composite Health Score: ${report.healthScore.compositeScore}/100`);
+console.log(`Bus Factor: ${report.busFactor.busFactor} (${report.busFactor.risk})`);
 
-console.log(`Health Grade: ${report.hygiene.grade}`);
-console.log(`Score: ${report.hygiene.score}/100`);
-
-for (const check of report.hygiene.checks) {
-  console.log(`${check.name}: ${check.found ? 'PASSED' : 'FAILED'}`);
-}
+// 2. Battle Mode: Compare repositories
+const comparison = await compareRepos(['facebook/react', 'vuejs/core']);
+console.log(`Winner: ${comparison.winner?.repo.owner}/${comparison.winner?.repo.name}`);
+console.log(`Winning Score: ${comparison.winner?.score}`);
 ```
 
 ---
 
-## 🏛️ Architecture & Design Principles
+## 🏛️ Architecture & Key Features
 
-This project is built under strict software engineering principles to ensure maintainability, resilience, and determinism:
-
-* **Clean Domain Layer:** Business logic and scoring formulas (`src/domain/`) have **zero external dependencies** and are 100% deterministically unit-tested.
-* **Resilient Infrastructure:**
-  * **HTTP 304 ETag Caching:** Automatically tracks HTTP ETags; repeated queries consume 0 rate-limit quota.
-  * **Typed Error Hierarchy:** Custom error classes (`RateLimitExceededError`, `RepositoryNotFoundError`, `InvalidRepoIdentifierError`, `NetworkError`) with exit code mapping and actionable hints.
-  * **Strict TypeScript:** Configured with `strict: true`, `noImplicitAny: true`, and `exactOptionalPropertyTypes: true`.
-* **Zero-Network Unit Tests:** Vitest suites run against recorded API fixtures (`tests/fixtures/`) ensuring fast, reliable CI test execution without flaky network calls.
+* **Zero-Clone Remote Profiling:** Queries GitHub REST endpoints concurrently in-memory without disk or network cloning overhead.
+* **Bus Factor & Contributor Risk:** Measures contributor commit concentration and Gini inequality index to detect single-point-of-failure projects.
+* **Commit Velocity & Staleness:** Analyzes rolling 30-day and 90-day activity trends to identify abandoned or active packages.
+* **Weighted Composite Scoring:** Transparent, mathematically bounded formula combining community hygiene (40%), maintenance velocity (35%), and contributor bus factor resilience (25%).
+* **HTTP 304 ETag Caching:** Preserves rate-limit quota across executions with automatic ETag tracking.
 
 ---
 
 ## 🗺️ Roadmap & Releases
 
-- [x] **v1.0.0 (Released)**: Core engine, resilient GitHub API client with ETag cache, Hygiene Analyzer, rich terminal & JSON formatters, CLI entrypoint, and unit test suite.
-- [x] **v1.1.0 (Released)**: Zero-clone Git Trees analyzer, polyglot stack detector (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, Docker), and language composition breakdown.
-- [x] **v1.2.0 (Current)**: Bus factor calculation via Gini coefficient, commit velocity metrics, and weighted composite Health Score (0–100).
-- [ ] **v1.3.0**: Multi-repo side-by-side battle mode (`repovet compare repoA repoB`), Markdown report exporter, and `--min-score` CI quality gate.
+- [x] **v1.0.0**: Core engine, GitHub client with ETag cache, Hygiene Analyzer, terminal & JSON formatters, CLI entrypoint.
+- [x] **v1.1.0**: Zero-clone Git Trees analyzer, polyglot stack detector (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, Docker), language breakdown.
+- [x] **v1.2.0**: Contributor Bus Factor via Gini coefficient, commit velocity metrics, and composite Health Score (0–100).
+- [x] **v1.3.0**: Multi-repo comparison Battle Mode (`repovet compare`), Markdown report exporter (`--markdown`), and CI quality gate (`--min-score`).
 
 ---
 
@@ -137,6 +159,10 @@ pnpm test
 
 # Typecheck source code
 pnpm typecheck
+
+# Code quality check & format
+pnpm check
+pnpm format
 
 # Build library and CLI bundles
 pnpm build

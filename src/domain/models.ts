@@ -1,6 +1,6 @@
 import { InvalidRepoIdentifierError } from './errors.js';
 
-export const APP_VERSION = '1.2.0';
+export const APP_VERSION = '1.3.0';
 
 export interface RepoIdentifier {
   readonly owner: string;
@@ -104,6 +104,22 @@ export interface AuditReport {
 }
 
 export type VetReport = AuditReport;
+
+export interface ComparisonWinner {
+  readonly repo: RepoIdentifier;
+  readonly score: number;
+  readonly grade: HealthGrade;
+  readonly reasons: readonly string[];
+}
+
+export interface ComparisonReport {
+  readonly version: string;
+  readonly timestamp: string;
+  readonly reports: readonly AuditReport[];
+  readonly winner?: ComparisonWinner | undefined;
+}
+
+export type VetComparisonReport = ComparisonReport;
 
 /**
  * Parses user input (e.g. 'facebook/react' or 'https://github.com/facebook/react')
